@@ -5,6 +5,7 @@
 #define I2C_SCL A5 // const
 #define I2C_BYTE_RFS    2 // BYTES READ FROM SLAVE
 #define I2C_BYTE_STS    2 // BYTES SEND TO SLAVE
+#define I2C_CONF_LEN    1
 /// Pin of led
 #define LED     7
 
@@ -12,6 +13,11 @@
 #define CE_PIN      8
 #define CSN_PIN     9
 #define NUM_PIPE    1
-#define CHANEL_ADDRESS "00001"
+#define CHANNEL_READ_ADDRESS "00001"
+#define CHANNEL_SEND_ADDRESS "00002"
 #define CHANEL_PORT     80
 #define TXT_MAX_LEN     100
+
+/// Properties of Data
+#define CONF_DATA_TRUE  0X88
+#define CONF_DATA_FALSE 0X08

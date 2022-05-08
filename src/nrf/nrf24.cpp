@@ -1,13 +1,19 @@
 #include "nrf24.h"
+NRF24::NRF24(){
 
-NRF24::NRF24(const byte* inAddress, int inPort){
-    address = new byte[strlen((const char*)inAddress) +1];
-    address = inAddress;
+}
+
+NRF24::NRF24(const byte* inReadAddress, const byte* inWriteAddress, int inPort){
+    readAddress = new byte[strlen((const char*)inReadAddress) +1];
+    readAddress = inReadAddress;
+    writeAddress = new byte[strlen((const char*)inWriteAddress) +1];
+    writeAddress = inWriteAddress;
     port = inPort;
 }
 
 NRF24::~NRF24(){
-    delete [] address;
+    delete [] readAddress;
+    delete [] writeAddress;
 }
 
 void NRF24::init(){
@@ -17,7 +23,8 @@ void NRF24::init(){
         Serial.println("Cannot start module...!");
         delay(200);
     }
-    radio.openReadingPipe(NUM_PIPE, address);
+    radio.openReadingPipe(NUM_PIPE, readAddress);
+    radio.openWritingPipe(writeAddress);
   // Moi module RF24L01 co 6 duong truyen (tu 0 den 5)
   // Duong truyen 0 da dung cho viec ghi(mac dinh)
   // Vi vay chi dung 1-5, neu dung 0 se bi chong lan
@@ -47,4 +54,10 @@ char* NRF24::readData(){
     return text;
   }
   return '\0';
+}
+
+void NRF24::sendData(char* inData){
+  radio.stopListening();
+  radio.write(inData, sizeof(*inData));
+  radio.startListening();
 }

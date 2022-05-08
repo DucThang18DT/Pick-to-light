@@ -4,10 +4,23 @@
 #include <Vector.h>
 #include "nrf/nrf24.h"
 
-Vector<Data> data = {};
-I2CProtocol master;
-NRF24 recei;
+class Task{
+    public:
+        Task();
+        ~Task();
+        void init();
 
-void Init();
-bool receiveDataFromGWay(uint8_t* inData);
-void sendDataToSlave();
+        bool readDataFromGWay();
+        void sendDataToSlave();
+        void readSttFromSlave();
+        bool sendSttToGway();
+    protected:
+        void clearData();
+        int checkID(char inID);
+    private:
+        Vector<Data> data;
+        I2CProtocol master;
+        NRF24 recei;
+};
+
+

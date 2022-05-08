@@ -1,5 +1,13 @@
 #include "I2CProt.h"
 
+I2CProtocol::I2CProtocol(){
+    
+}
+
+I2CProtocol::~I2CProtocol(){
+
+}
+
 void _receiveData(int ){
     char* data = new char[I2C_BYTE_STS];
     int index = 0;

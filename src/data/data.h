@@ -6,4 +6,5 @@ struct Data
     ~Data();
     char    id;
     char    number;
+    bool    confirm;
 };
