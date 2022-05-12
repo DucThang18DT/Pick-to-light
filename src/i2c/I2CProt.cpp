@@ -5,7 +5,14 @@ I2CProtocol::I2CProtocol(){
 }
 
 I2CProtocol::~I2CProtocol(){
-
+    if (m_DataSend != nullptr){
+        delete [] m_DataSend;
+        m_DataSend = nullptr;
+    }
+    if (m_DataReceived != nullptr){
+        delete [] m_DataReceived;
+        m_DataReceived = nullptr;
+    }
 }
 
 void _receiveData(int ){
