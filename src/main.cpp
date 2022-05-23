@@ -4,9 +4,10 @@
 Task task;
 
 void setup() {
-    task = Task();
+  Serial.begin(9600);
+  task = Task();
 }
 
 void loop() {
   task.showNumber(task.receiveDataFromMaster());
-} 
+}

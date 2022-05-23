@@ -16,6 +16,8 @@ class Task{
     private:
         static I2CProtocol m_slave;
         Led7SegMent m_led7seg;
+        int m_value;
         int m_singleLed;
         int m_confirmButton;
 };
+

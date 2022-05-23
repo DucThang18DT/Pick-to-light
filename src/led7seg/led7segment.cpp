@@ -1,6 +1,8 @@
 #include "led7segment.h"
 
 Led7SegMent::Led7SegMent(){
+    pinMode(LED_7SEG_1, OUTPUT);
+    pinMode(LED_7SEG_2, OUTPUT);
     turnOff();
 }
 

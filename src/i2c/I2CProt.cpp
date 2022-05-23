@@ -1,26 +1,30 @@
 #include "I2CProt.h"
 
+// int* I2CProtocol::m_DataReceived = new int[I2C_BYTE_RFS];
+// int* I2CProtocol::m_DataSend = new int[I2C_BYTE_STS];
+
 I2CProtocol::I2CProtocol(){
     
 }
 
 I2CProtocol::~I2CProtocol(){
-    clearDataReceived();
-    clearDataSendToMaster();
+    // clearDataReceived();
+    // clearDataSendToMaster();
 }
 
 void _receiveData(int ){
-    char* data = new char[I2C_BYTE_STS];
-    int index = 0;
-    while (Wire.available() && (index < I2C_BYTE_STS)){
-        data[index] = Wire.read();
-        ++index;
+    //int* data = new int[I2C_BYTE_STS];
+    //int index = 0;
+    while (Wire.available() /*&& (index < I2C_BYTE_STS)*/){
+        I2CProtocol::setDataReceived(Wire.read());
+        // data[index] = Wire.read();
+        // ++index;
     }
-    I2CProtocol::setDataReceived(data, index + 1);
+    // I2CProtocol::setDataReceived(data);
 }
 
 void _sendDataToMaster(){
-    Wire.write(I2CProtocol::getDataSendToMaster());
+    Wire.write(I2CProtocol::getDataSendToMaster()[0]);
 }
 
 void I2CProtocol::I2C_MasterInit(){
@@ -35,62 +39,64 @@ void I2CProtocol::I2C_SlaveInit(int inID){
     Wire.onRequest(_sendDataToMaster);
 }
 
-bool I2CProtocol::I2C_SendDataToSlave(uint8_t inID, char* inData, int inLength){
+bool I2CProtocol::I2C_SendDataToSlave(int inID, int inData){
     Wire.beginTransmission(inID);
-    for (int index = 0; index < inLength; index++){
-        Wire.write(inData[index]);
-    }
+    //for (int index = 0; index < inLength; index++){
+        Wire.write(inData);
+    //}
     Wire.endTransmission();
     return true;
 }
 
-char* I2CProtocol::I2C_ReadDataFromSlave(uint8_t inID, int* outLength){
-    char* outData;
+int I2CProtocol::I2C_ReadDataFromSlave(int inID){
+    // int outData;
     Wire.requestFrom(inID, I2C_BYTE_RFS);
-    *outLength = Wire.available();
-    outData = new char[*outLength];
-    for (int index = 0; index < *outLength; index++){
-        outData[index] = Wire.read();
-    }
-    return outData;
+    //*outLength = Wire.available();
+    // outData = new int[*outLength];
+    //for (int index = 0; index < *outLength; index++){
+        // outData = Wire.read();
+    //}
+    return Wire.read();
 }
 
-void I2CProtocol::setDataReceived(char* inData, int inLength){
-    if (m_DataReceived != nullptr) delete [] m_DataReceived;
-    m_DataReceived = new char[inLength + 1];
-    strcpy(m_DataReceived, inData);
+void I2CProtocol::setDataReceived(int inData){
+    // if (m_DataReceived != nullptr) delete [] m_DataReceived;
+    // m_DataReceived = new int[inLength + 1];
+    m_DataReceived = inData;
+    //strcpy(m_DataReceived, inData);
 }
 
-char* I2CProtocol::getDataReceived(){
-    return m_DataReceived;
+int* I2CProtocol::getDataReceived(){
+    return &m_DataReceived;
 }
 
-void I2CProtocol::setDataSendToMaster(char inData){
-    if (m_DataSend != nullptr) delete[] m_DataSend;
-    m_DataSend = new char[1];
-    m_DataSend[0] = inData;
+void I2CProtocol::setDataSendToMaster(int inData){
+    // if (m_DataSend != nullptr) delete[] m_DataSend;
+    // m_DataSend = new int[I2C_BYTE_STS];
+    m_DataSend = inData;
 }
 
-void I2CProtocol::setDataSendToMaster(char* inData, int inLength){
-    if (m_DataSend != nullptr) delete[] m_DataSend;
-    m_DataSend = new char[inLength + 1];
-    strcpy(m_DataSend, inData);
+void I2CProtocol::setDataSendToMaster(int inData){
+    // if (m_DataSend != nullptr) delete[] m_DataSend;
+    // m_DataSend = new int[inLength + 1];
+    m_DataSend = inData;
+    // strcpy(m_DataSend, inData);
 }
 
-char* I2CProtocol::getDataSendToMaster(){
-    return m_DataSend;
+int* I2CProtocol::getDataSendToMaster(){
+    return &m_DataSend;
 }
 
 void I2CProtocol::clearDataReceived(){
-    if (m_DataReceived != nullptr){
-        delete [] m_DataReceived;
-        m_DataReceived = nullptr;
-    } 
+    // if (m_DataReceived != nullptr){
+    //     delete [] m_DataReceived;
+        m_DataReceived = 0;
+    // } 
 }
 
 void I2CProtocol::clearDataSendToMaster(){
-    if (m_DataSend != nullptr){
-        delete [] m_DataSend;
-        m_DataSend = nullptr;
-    }
+    // if (m_DataSend != nullptr){
+    //     delete [] m_DataSend;
+        m_DataSend = 0;
+    // }
 }

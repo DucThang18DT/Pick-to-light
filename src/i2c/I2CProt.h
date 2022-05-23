@@ -13,20 +13,20 @@ class I2CProtocol{
 
         void I2C_MasterInit();
         void I2C_SlaveInit(int inID);
-        char* I2C_ReadDataFromSlave(uint8_t inID, int* outLength);
-        bool I2C_SendDataToSlave(uint8_t inID, char* inData, int inLength);
-        bool I2C_SendDataToMaster(char* inData, int inLength);
+        int I2C_ReadDataFromSlave(int inID);
+        bool I2C_SendDataToSlave(int inID, int inData);
+        bool I2C_SendDataToMaster(int inData);
 
         static void clearDataReceived();
-        static void setDataReceived(char* inData, int inLength);
-        static char* getDataReceived();
+        static void setDataReceived(int inData);
+        static int* getDataReceived();
         static void clearDataSendToMaster();
-        static void setDataSendToMaster(char* inData, int inLength);
-        static void setDataSendToMaster(char inData);
-        static char* getDataSendToMaster();
+        static void setDataSendToMaster(int inData);
+        static void setDataSendToMaster(int inData);
+        static int* getDataSendToMaster();
     protected:
     private:
-        static char* m_DataReceived;
-        static char* m_DataSend;
-        uint8_t m_ID;
+        static int m_DataReceived;
+        static int m_DataSend;
+        int m_ID;
 };
