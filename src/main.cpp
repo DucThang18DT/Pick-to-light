@@ -3,13 +3,27 @@
 Task task = Task();
 
 void setup() {
-    task.init();
+    Serial.begin(9600);
+    //task = Task();
+    task.addValueToData();
+    
+    // int storage_array[MAX_SIZE];
+    // Vector<int> test(storage_array);
+    // test.push_back(5);
+    // Serial.print("size of test = ");
+    // Serial.println(test.size());
+    // Serial.println(test.at(0));
 }
 
 void loop() {
-    if (task.readDataFromGWay() == true){
-        task.sendDataToSlave();
-    }
+    // Serial.print("size of test = ");
+    // Serial.println(test.size());
+    // if (task.readDataFromGWay() == true){
+    //     task.sendDataToSlave();
+    // }
+    Serial.println("Send to slave...");
+    task.sendDataToSlave();
     task.readSttFromSlave();
-    task.sendSttToGway();
+    delay(500);
+    //task.sendSttToGway();
 }
