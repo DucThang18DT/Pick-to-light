@@ -21,7 +21,7 @@ class I2CProtocol{
         static void setDataReceived(int inData);
         static int* getDataReceived();
         static void clearDataSendToMaster();
-        static void setDataSendToMaster(int inData);
+        //static void setDataSendToMaster(int inData);
         static void setDataSendToMaster(int inData);
         static int* getDataSendToMaster();
     protected:

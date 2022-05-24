@@ -16,7 +16,7 @@ Task::~Task(){
 
 void Task::init(){
     //m_slave = new I2CProtocol();
-    m_value = (char)0x00;
+    m_value = 0;
     m_slave.I2C_SlaveInit(I2C_SLAVE_ID);
     Serial.println("slave init done");
     pinMode(SH_PIN, OUTPUT);
@@ -34,8 +34,8 @@ void Task::init(){
 
 int Task::receiveDataFromMaster(){
     Serial.println("receive data from master");
-    if (m_slave.getDataReceived() == nullptr) return -1;
-    char data = m_slave.getDataReceived()[0];
+    // if (*(m_slave.getDataReceived()) == -1) return -1;
+    int data = *(m_slave.getDataReceived());
     m_slave.clearDataReceived();
     return data;
 } 
