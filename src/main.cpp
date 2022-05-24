@@ -6,7 +6,8 @@ void setup() {
     Serial.begin(9600);
     //task = Task();
     task.addValueToData();
-    
+    task.sendDataToSlave();
+
     // int storage_array[MAX_SIZE];
     // Vector<int> test(storage_array);
     // test.push_back(5);
@@ -22,7 +23,7 @@ void loop() {
     //     task.sendDataToSlave();
     // }
     Serial.println("Send to slave...");
-    task.sendDataToSlave();
+    // task.sendDataToSlave();
     task.readSttFromSlave();
     delay(500);
     //task.sendSttToGway();

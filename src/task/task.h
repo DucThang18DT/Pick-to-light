@@ -25,7 +25,7 @@ class Task{
 
     protected:
         void clearData();
-        int checkID(char inID);
+        int checkID(int inID);
     private:
         
         I2CProtocol master;
