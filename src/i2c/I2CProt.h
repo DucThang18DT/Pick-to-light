@@ -24,8 +24,11 @@ class I2CProtocol{
         //static void setDataSendToMaster(int inData);
         static void setDataSendToMaster(int inData);
         static int* getDataSendToMaster();
+        static bool getConfirm();
+        static void setConfirm(bool inConfirm);
     protected:
     private:
+        static bool m_Confirm;
         static int m_DataReceived;
         static int m_DataSend;
         int m_ID;

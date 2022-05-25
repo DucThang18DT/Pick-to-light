@@ -2,8 +2,9 @@
 
 // int* I2CProtocol::m_DataReceived = new int[I2C_BYTE_RFS];
 // int* I2CProtocol::m_DataSend = new int[I2C_BYTE_STS];
-int I2CProtocol::m_DataReceived = -1;
-int I2CProtocol::m_DataSend = -1;
+int I2CProtocol::m_DataReceived = 0;
+int I2CProtocol::m_DataSend = CONF_DATA_FALSE;
+bool I2CProtocol::m_Confirm = false;
 
 I2CProtocol::I2CProtocol(){
     
@@ -17,6 +18,7 @@ I2CProtocol::~I2CProtocol(){
 void _receiveData(int ){
     //int* data = new int[I2C_BYTE_STS];
     //int index = 0;
+    I2CProtocol::setConfirm(false);
     while (Wire.available() /*&& (index < I2C_BYTE_STS)*/){
         I2CProtocol::setDataReceived(Wire.read());
         // data[index] = Wire.read();
@@ -26,9 +28,20 @@ void _receiveData(int ){
 }
 
 void _sendDataToMaster(){
-    Serial.print("send to master: ");
-    Serial.println(*(I2CProtocol::getDataSendToMaster()));
-    Wire.write(*(I2CProtocol::getDataSendToMaster()));
+    Serial.println("X");
+    //Serial.println("Hello");
+    //Serial.println(*(I2CProtocol::getDataSendToMaster()));
+    Wire.print("T");
+    Wire.write("T", 1);
+    if (I2CProtocol::getConfirm() == true){
+        I2CProtocol::setConfirm(false);
+        digitalWrite(I2C_CONFIRM, LOW);
+        digitalWrite(I2C_CONFIRM, HIGH);
+        delay(1);
+        digitalWrite(I2C_CONFIRM, LOW);
+    }
+    // delay(200);
+    //Wire.write(*(I2CProtocol::getDataSendToMaster()));
 }
 
 void I2CProtocol::I2C_MasterInit(){
@@ -40,6 +53,8 @@ void I2CProtocol::I2C_SlaveInit(int inID){
     Wire.begin(m_ID);
     Wire.onRequest(_sendDataToMaster);
     Wire.onReceive(_receiveData);
+    pinMode(I2C_CONFIRM, OUTPUT);
+    digitalWrite(I2C_CONFIRM, LOW);
     Serial.println("slave init done");
 }
 
@@ -103,4 +118,12 @@ void I2CProtocol::clearDataSendToMaster(){
     //     delete [] m_DataSend;
         m_DataSend = -1;
     // }
+}
+
+bool I2CProtocol::getConfirm(){
+    return m_Confirm;
+}
+        
+void  I2CProtocol::setConfirm(bool inConfirm){
+    m_Confirm = inConfirm;
 }

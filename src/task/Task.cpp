@@ -3,7 +3,11 @@
 I2CProtocol Task::m_slave = I2CProtocol();
 
 void _setSendData(){
-    Task::getHandleSlave()->setDataSendToMaster(CONF_DATA_TRUE);
+    Serial.println("interrupt");
+    if (*Task::getHandleSlave()->getDataSendToMaster() == CONF_DATA_FALSE){
+        I2CProtocol::setConfirm(true);
+        Task::getHandleSlave()->setDataSendToMaster(CONF_DATA_TRUE);
+    }
 }
 
 Task::Task(){
@@ -18,7 +22,8 @@ void Task::init(){
     //m_slave = new I2CProtocol();
     m_value = 0;
     m_slave.I2C_SlaveInit(I2C_SLAVE_ID);
-    Serial.println("slave init done");
+    Serial.print("m_slave.dataSendToMaster = ");
+    Serial.println(*m_slave.getDataSendToMaster());
     pinMode(SH_PIN, OUTPUT);
     pinMode(ST_PIN, OUTPUT);
     pinMode(DS_PIN, OUTPUT);
@@ -35,9 +40,9 @@ void Task::init(){
 int Task::receiveDataFromMaster(){
     Serial.println("receive data from master");
     // if (*(m_slave.getDataReceived()) == -1) return -1;
-    int data = *(m_slave.getDataReceived());
-    m_slave.clearDataReceived();
-    return data;
+    return *(m_slave.getDataReceived());
+    // m_slave.clearDataReceived();
+    // return data;
 } 
 
 void Task::showNumber(int inNum){
@@ -48,13 +53,13 @@ void Task::showNumber(int inNum){
         digitalWrite(m_singleLed, LOW);
         return;
     }
-    if (inNum == -1){
-        m_led7seg.showNumber(m_value);
+    //if (inNum == -1){
+        m_led7seg.showNumber(inNum);
         digitalWrite(m_singleLed, HIGH);
-    }
-    else{
-        m_value = inNum;
-    }
+    // }
+    // else{
+    //     m_value = inNum;
+    // }
 }
 
 I2CProtocol* Task::getHandleSlave(){

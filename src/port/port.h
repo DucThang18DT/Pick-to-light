@@ -3,10 +3,12 @@
 /// Properties of I2C Protocol
 #define I2C_SDA A4 // const
 #define I2C_SCL A5 // const
+#define I2C_CONFIRM     12
 #define I2C_BYTE_RFS    (sizeof(int)) // BYTES READ FROM SLAVE
 #define I2C_BYTE_STS    (sizeof(int)) // BYTES SEND TO SLAVE
 #define I2C_CONF_LEN    1
 #define I2C_SLAVE_ID    0x01
+#define I2C_SLAVE_ID1    0x02
 
 /// Properties of Module Lamp
 /// Pin of led
