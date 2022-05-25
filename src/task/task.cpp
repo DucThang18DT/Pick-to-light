@@ -24,9 +24,15 @@ void Task::init(){
 }
 
 void Task::clearData(){
+    Serial.println("\nClear data");
     unsigned int index = 0;
     while ((data.size() > 0) && (index < data.size())){
-        if (data.at(index).confirm == true) data.remove(index);
+        if (data.at(index).confirm == true) {
+            Serial.print("remove index = ");
+            Serial.println(index);
+            data.remove(index);
+            Serial.println(data.at(index).id);
+        }
         else ++index;
     }
 }
@@ -58,27 +64,34 @@ void Task::sendDataToSlave(){
     Serial.print("data size: ");
     Serial.println(data.size());
     for (unsigned int index = 0; index < data.size(); index++){
-        master.I2C_SendDataToSlave(data.at(index).id, data.at(index).number);
-        Serial.println("\nsend data to  slave");
-        Serial.print("id: ");
-        Serial.println(data.at(index).id);
-        Serial.print("data: ");
-        Serial.println(data.at(index).number);
+        if (data.at(index).confirm == false){
+            master.I2C_SendDataToSlave(data.at(index).id, data.at(index).number);
+            Serial.println("\nsend data to  slave");
+            Serial.print("id: ");
+            Serial.println(data.at(index).id);
+            Serial.print("data: ");
+            Serial.println(data.at(index).number);
+        }
     }
 }
 
 void Task::readSttFromSlave(){
     //char* confData = new char[I2C_CONF_LEN + 1];
     //int confLen;
-    for (int index = 0; index < data.size(); index++){
+    for (unsigned int index = 0; index < data.size(); index++){
         //confData = master.I2C_ReadDataFromSlave(data.at(index).id, &confLen);
-        Serial.print("read data - id = ");
-        Serial.println(data.at(index).id);
-        int confData = master.I2C_ReadDataFromSlave(data.at(index).id);
-        data.at(index).confirm = (confData == CONF_DATA_TRUE)? true: false;
-        Serial.print("read data - confirm = ");
-        Serial.println(data.at(index).confirm == true? "true": "false");
-        Serial.println(confData);
+        //Serial.print("read data - id = ");
+        //Serial.println(data.at(index).id);
+        if (data.at(index).confirm == false){
+            int confData = master.I2C_ReadDataFromSlave(data.at(index).id);
+            data.at(index).confirm = (confData == CONF_DATA_TRUE)? true: false;
+            Serial.print("confirm = ");
+            Serial.println(data.at(index).confirm == true? "true": "false");
+        }
+        
+        //Serial.print("\nread data - confirm = ");
+        //Serial.println(data.at(index).confirm == true? "true": "false");
+        //Serial.println(confData);
     }
     //delete[] confData;
 }
@@ -106,5 +119,5 @@ void Task::addValueToData(){
         getDataRef()->pop_back();
     }
     getDataRef()->push_back(Data(I2C_SLAVE_ID, 12));
-    //getDataRef()->push_back(Data(I2C_SLAVE_ID1, 1));
+    getDataRef()->push_back(Data(I2C_SLAVE_ID1, 1));
 }

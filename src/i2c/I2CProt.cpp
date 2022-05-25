@@ -4,6 +4,12 @@
 // int* I2CProtocol::m_DataSend = new int[I2C_BYTE_STS];
 int I2CProtocol::m_DataReceived = -1;
 int I2CProtocol::m_DataSend = -1;
+bool I2CProtocol::m_Confirm = false;
+
+void _getConfirm(){
+    Serial.println("interrupt");
+    I2CProtocol::setConfirm(true);
+}
 
 I2CProtocol::I2CProtocol(){
     
@@ -31,6 +37,8 @@ void _sendDataToMaster(){
 
 void I2CProtocol::I2C_MasterInit(){
     Wire.begin();
+    pinMode(2, INPUT);
+    attachInterrupt(0, _getConfirm, RISING);
 }
 
 void I2CProtocol::I2C_SlaveInit(int inID){
@@ -55,22 +63,27 @@ int I2CProtocol::I2C_ReadDataFromSlave(int inID){
     // Wire.beginTransmission(inID);
     
     //Wire.begin();
-    Serial.println("-- read from slave --");
+    Serial.println("\n-- read from slave --");
     Serial.print("id: ");
     Serial.println(inID);
 
     Serial.print("bytes received = ");
-    Serial.println(Wire.requestFrom(inID, sizeof(int)));
+    Serial.println(int(Wire.requestFrom(inID, /*sizeof(int)*/1)));
     //*outLength = Wire.available();
     // outData = new int[*outLength];
     //for (int index = 0; index < *outLength; index++){
         // outData = Wire.read();
     //}
-    
-    //while (Wire.available()){
-        int c = Wire.read();
-        Serial.print(c);
-    //}
+    delay(10);
+    if (getConfirm() == true) {
+        setConfirm(false);
+        return CONF_DATA_TRUE;
+    }
+
+    // while (Wire.available()){
+    //     byte c = Wire.read();
+    //     Serial.print(c);
+    // }
     return CONF_DATA_FALSE;
 }
 
@@ -114,4 +127,12 @@ void I2CProtocol::clearDataSendToMaster(){
     //     delete [] m_DataSend;
         m_DataSend = 0;
     // }
+}
+
+bool I2CProtocol::getConfirm(){
+    return m_Confirm;
+}
+        
+void  I2CProtocol::setConfirm(bool inConfirm){
+    m_Confirm = inConfirm;
 }

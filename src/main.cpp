@@ -7,7 +7,11 @@ void setup() {
     //task = Task();
     task.addValueToData();
     task.sendDataToSlave();
+    delay(200);
+    task.sendDataToSlave();
 
+    //data.remove(0);
+    //Serial.println(data.size());
     // int storage_array[MAX_SIZE];
     // Vector<int> test(storage_array);
     // test.push_back(5);
@@ -22,9 +26,15 @@ void loop() {
     // if (task.readDataFromGWay() == true){
     //     task.sendDataToSlave();
     // }
-    Serial.println("Send to slave...");
+    //Serial.println("Send to slave...");
     // task.sendDataToSlave();
+
+    // task.sendDataToSlave();
+    // delay(200);
     task.readSttFromSlave();
-    delay(500);
+    //task.clearData();
+    // Serial.print("data size = ");
+    // Serial.println(data.size());
+    //delay(500);
     //task.sendSttToGway();
 }

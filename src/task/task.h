@@ -23,8 +23,9 @@ class Task{
         Vector<Data>* getDataRef();
         void addValueToData();
 
-    protected:
         void clearData();
+    protected:
+        
         int checkID(int inID);
     private:
         
