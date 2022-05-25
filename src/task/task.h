@@ -24,11 +24,12 @@ class Task{
         void addValueToData();
 
         void clearData();
+
+        bool updateToGWay;
     protected:
         
         int checkID(int inID);
     private:
-        
         I2CProtocol master;
         NRF24 recei;
 };

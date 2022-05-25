@@ -9,6 +9,7 @@ NRF24::NRF24(const byte* inReadAddress, const byte* inWriteAddress, int inPort){
     writeAddress = new byte[strlen((const char*)inWriteAddress) +1];
     writeAddress = inWriteAddress;
     port = inPort;
+    init();
 }
 
 NRF24::~NRF24(){

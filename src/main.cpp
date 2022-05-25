@@ -23,9 +23,9 @@ void setup() {
 void loop() {
     // Serial.print("size of test = ");
     // Serial.println(test.size());
-    // if (task.readDataFromGWay() == true){
-    //     task.sendDataToSlave();
-    // }
+    if (task.readDataFromGWay() == true){
+        task.sendDataToSlave();
+    }
     //Serial.println("Send to slave...");
     // task.sendDataToSlave();
 
@@ -36,5 +36,9 @@ void loop() {
     // Serial.print("data size = ");
     // Serial.println(data.size());
     //delay(500);
-    //task.sendSttToGway();
+    if (task.updateToGWay == true){
+        task.sendSttToGway();
+        task.updateToGWay = false;
+    }
+        
 }

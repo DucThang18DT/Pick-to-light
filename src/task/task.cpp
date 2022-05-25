@@ -12,6 +12,7 @@ Task::~Task(){
 }
 
 void Task::init(){
+    updateToGWay = false;
     //data = Vector<Data>();
     // //data = Vector<Data>(storageArray);
     // Serial.print("data = ");
@@ -19,8 +20,7 @@ void Task::init(){
     master = I2CProtocol();
     master.I2C_MasterInit();
     Serial.println("master init done");
-    //recei = NRF24((const byte*)CHANNEL_READ_ADDRESS, (const byte*)CHANNEL_SEND_ADDRESS, CHANEL_PORT);
-    //recei.init();
+    recei = NRF24((const byte*)CHANNEL_READ_ADDRESS, (const byte*)CHANNEL_SEND_ADDRESS, CHANEL_PORT);
 }
 
 void Task::clearData(){
@@ -45,6 +45,10 @@ int Task::checkID(int inID){
 
 bool Task::readDataFromGWay(){
     clearData();
+    /*
+    * Data format: 
+    *   rcData = [id1], [num1], [id2], [num2],...,[idn], [numn], '\0', '\0'
+    */
     char* rcData = recei.readData();
     if (rcData[0] == '\0') return false;
     int index = 0;
@@ -52,8 +56,10 @@ bool Task::readDataFromGWay(){
         int isExist = checkID(rcData[index]);
         if (isExist == -1)
             data.push_back(Data(rcData[index], rcData[++index]));
-        else
+        else{
             data.at(isExist).number = rcData[++index];
+            data.at(isExist).confirm = false;
+        }
         ++index;
     }
     delete []rcData;
@@ -85,6 +91,7 @@ void Task::readSttFromSlave(){
         if (data.at(index).confirm == false){
             int confData = master.I2C_ReadDataFromSlave(data.at(index).id);
             data.at(index).confirm = (confData == CONF_DATA_TRUE)? true: false;
+            updateToGWay = (confData == CONF_DATA_TRUE)? true: updateToGWay;
             Serial.print("confirm = ");
             Serial.println(data.at(index).confirm == true? "true": "false");
         }
@@ -98,13 +105,19 @@ void Task::readSttFromSlave(){
 
 bool Task::sendSttToGway(){
     if (data.size() == 0) return false;
-    char* _sendData = new char[data.size()*2];
+    char* _sendData = new char[data.size()+1];
+    memset(_sendData, 0, sizeof(_sendData));
     unsigned int index = 0;
-    while ((index + 1) < data.size()*2){
-        _sendData[index] = data.at(index).id;
-        _sendData[++index] = data.at(index -1).id;
-        ++index;
+    for (int idx = 0; idx < data.size(); idx++){
+        if (data.at(idx).confirm == true){
+            _sendData[index] = data.at(idx).id + '0';
+            ++index;
+        }
     }
+    /*
+    * Data format:
+    *   _sendData = [id1], [id2], ..., [idn], '\0'
+    */
     recei.sendData(_sendData);
     delete [] _sendData;
     return true;
