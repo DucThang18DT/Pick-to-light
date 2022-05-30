@@ -4,12 +4,21 @@ NRF24::NRF24(){
 }
 
 NRF24::NRF24(const byte* inReadAddress, const byte* inWriteAddress, int inPort){
+    Serial.begin(9600);
     readAddress = new byte[strlen((const char*)inReadAddress) +1];
-    readAddress = inReadAddress;
+    //readAddress = inReadAddress;
+    strcpy(readAddress, inReadAddress);
+    Serial.print("Hello1");
+    delay(10);
     writeAddress = new byte[strlen((const char*)inWriteAddress) +1];
-    writeAddress = inWriteAddress;
+    //writeAddress = inWriteAddress;
+    strcpy(writeAddress, inWriteAddress);
+    Serial.print("Hello2");
+    delay(10);
     port = inPort;
     init();
+    Serial.print("Hello3");
+    delay(10);
 }
 
 NRF24::~NRF24(){
@@ -24,8 +33,8 @@ void NRF24::init(){
         Serial.println("Cannot start module...!");
         delay(200);
     }
-    radio.openReadingPipe(NUM_PIPE, readAddress);
     radio.openWritingPipe(writeAddress);
+    radio.openReadingPipe(NUM_PIPE, readAddress);
   // Moi module RF24L01 co 6 duong truyen (tu 0 den 5)
   // Duong truyen 0 da dung cho viec ghi(mac dinh)
   // Vi vay chi dung 1-5, neu dung 0 se bi chong lan
@@ -39,7 +48,6 @@ void NRF24::init(){
     radio.setDataRate(RF24_250KBPS); //Toc do truyen du lieu trong khong khi 
                                    // 250Kbps, 1Mbps, 2Mbps
                                    // 250 thap nhat nhung truyen xa, 1Mb va 2Mb manh nhung truyen khong xa
-    radio.startListening(); // cai dat module la RX
     if(!radio.available())
     {
         Serial.println("Cannot connect to TX...!");
@@ -48,10 +56,11 @@ void NRF24::init(){
 }
 
 char* NRF24::readData(){
-    if(radio.available())
+  radio.startListening();
+  if(radio.available())
   {
     char text[TXT_MAX_LEN] = ""; 
-    radio.read(&text,sizeof(text)); // Doc du lieu thu duoc
+    radio.read(&text,TXT_MAX_LEN); // Doc du lieu thu duoc
     return text;
   }
   return '\0';
