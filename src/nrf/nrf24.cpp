@@ -10,6 +10,8 @@ NRF24::NRF24(/*const byte* inReadAddress, const byte* inWriteAddress,*/ int inPo
     // writeAddress = inWriteAddress;
     port = inPort;
     init();
+    Serial.print("Hello3");
+    delay(10);
 }
 
 NRF24::~NRF24(){
@@ -39,7 +41,6 @@ void NRF24::init(){
     radio.setDataRate(RF24_250KBPS); //Toc do truyen du lieu trong khong khi 
                                    // 250Kbps, 1Mbps, 2Mbps
                                    // 250 thap nhat nhung truyen xa, 1Mb va 2Mb manh nhung truyen khong xa
-    radio.startListening(); // cai dat module la RX
     if(!radio.available())
     {
         Serial.println("Cannot connect to TX...!");
