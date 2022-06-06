@@ -12,15 +12,8 @@ void gWayInit(){
   }
   else{
     Serial.println("(main) Can not begin Stream");
-  }
-  
-  
+  } 
 }
-
-// void sendDataSendToCtler(){
-//   //buildListDevices(&listDevices);
-//   rf24.sendData(listDevices.c_str());
-// }
 
 void sendDataToCloud(char* list){
   Serial.println("\n--- Send to Cloud ---");
@@ -48,8 +41,6 @@ void sendDataToCloud(char* list){
   }
   memset(listConfirm, 0, MAX_LEN);
   Serial.println("\n--- End send to cloud ---");
-  // listConfirm.clear();
-  //fbDatatbase.sendData("/Test/ok", 1, Mode::set);
 }
 
 void readDataFromCloud(){
@@ -58,9 +49,23 @@ void readDataFromCloud(){
   Serial.println(listDevices);
 }
 
-// void readDataFromCtler(){
-//   char* data = rf24.readData();
-//   if (strlen(data) > 0){
-//     listConfirm = String(data);
-//   }
-// }
+void sendDataSendToCtler(){
+  Serial.println("\n--- Send data to ctler");
+  // rf24.sendData("Test list");
+  rf24.sendData(listDevices);
+  Serial.println("--- End Send data to ctler");
+}
+
+void readDataFromCtler(char* list){
+  Serial.println("\n--- Read data from ctler");
+  char* data = rf24.readData();
+  if (strlen(data) > 0){
+    Serial.print("\nRead from ctler: ");
+    Serial.println(data);
+    Serial.print("\nLength data = ");
+    Serial.println(strlen(data));
+    strcpy(list, data);
+    Serial.println(strlen(list));
+  }
+  Serial.println("\n--- End Read data from ctler");
+}

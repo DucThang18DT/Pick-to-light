@@ -10,8 +10,8 @@
 
 // static String mySsid = "CLB PIONEER";
 // static String myPass = "c121bkdn";
-static String mySsid = "Private";
-static String myPass = "Kkkkkkkk";
+static String mySsid = "Kim Ngan 2";
+static String myPass = "manhhung";
 bool connectWifi(const char*, const char*);
 void disconnect();
 bool changeWifi(const char*, const char*);
