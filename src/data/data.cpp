@@ -3,7 +3,7 @@ Data::Data(){
 
 }
 
-Data::Data(int inID, int inNumber){
+Data::Data(char inID, char inNumber){
     id = inID;
     number = inNumber;
     confirm = false;

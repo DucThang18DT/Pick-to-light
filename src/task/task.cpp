@@ -20,7 +20,7 @@ void Task::init(){
     master = I2CProtocol();
     master.I2C_MasterInit();
     Serial.println("master init done");
-    recei = NRF24((const byte*)CHANNEL_READ_ADDRESS, (const byte*)CHANNEL_SEND_ADDRESS, CHANEL_PORT);
+    recei = NRF24(/*(const byte*)CHANNEL_READ_ADDRESS, (const byte*)CHANNEL_SEND_ADDRESS,*/ CHANEL_PORT);
 }
 
 void Task::clearData(){
@@ -62,7 +62,8 @@ bool Task::readDataFromGWay(){
         }
         ++index;
     }
-    delete []rcData;
+    // delete []rcData;
+    rcData = nullptr;
     return true;
 }
 
@@ -106,7 +107,7 @@ void Task::readSttFromSlave(){
 bool Task::sendSttToGway(){
     if (data.size() == 0) return false;
     char* _sendData = new char[data.size()+1];
-    memset(_sendData, 0, sizeof(_sendData));
+    memset(_sendData, 0, data.size()+1);
     unsigned int index = 0;
     for (int idx = 0; idx < data.size(); idx++){
         if (data.at(idx).confirm == true){
@@ -118,9 +119,13 @@ bool Task::sendSttToGway(){
     * Data format:
     *   _sendData = [id1], [id2], ..., [idn], '\0'
     */
-    recei.sendData(_sendData);
+    if (strlen(_sendData) > 0){
+        recei.sendData(_sendData);
+        delete [] _sendData;
+        return true;
+    }
     delete [] _sendData;
-    return true;
+    return false;
 }
 
 Vector<Data>* Task::getDataRef(){

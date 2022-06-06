@@ -3,9 +3,9 @@
 struct Data
 {
     Data();
-    Data(int inID, int inNumber);
+    Data(char inID, char inNumber);
     ~Data();
-    int    id;
-    int    number;
+    char    id;
+    char    number;
     bool    confirm;
 };

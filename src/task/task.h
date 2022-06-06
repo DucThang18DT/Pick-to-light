@@ -5,7 +5,7 @@
 #include "nrf/nrf24.h"
 #include <Vector.h>
 
-#define MAX_SIZE    30
+#define MAX_SIZE    100
 static Data storageArray[MAX_SIZE];
 static Vector<Data> data(storageArray);
 
