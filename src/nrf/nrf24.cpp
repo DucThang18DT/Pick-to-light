@@ -10,6 +10,8 @@ NRF24::NRF24(/*const byte* inReadAddress, const byte* inWriteAddress,*/ int inPo
     // writeAddress = inWriteAddress;
     port = inPort;
     init();
+    Serial.print("Hello3");
+    delay(10);
 }
 
 NRF24::~NRF24(){
