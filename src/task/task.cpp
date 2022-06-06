@@ -12,6 +12,7 @@ Task::~Task(){
 }
 
 void Task::init(){
+    Serial.begin(9600);
     updateToGWay = false;
     //data = Vector<Data>();
     // //data = Vector<Data>(storageArray);
