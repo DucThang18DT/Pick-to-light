@@ -1,0 +1,35 @@
+Added Component: Designator=ESP32(MODULE_ESP32-DEVKITC-32D)
+Add component (AddParameter): Name = "Availability"; Value = "Warning"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/ESP32-DEVKITC-32D/Espressif%20Systems/view-part/2777395/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Espressif Systems"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "ESP32-DEVKITC-32D"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/ESP32-DEVKITC-32D/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/ESP32-DEVKITC-32D/Espressif%20Systems/view-part/2777395/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=nRF(JP4x2)
+Add component (AddParameter): Name = "Value"; Value = "Connector 4x2"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+3.3 Pin=ESP32-1
+Added Pin To Net: NetName=+3.3 Pin=nRF-4
+Added Net: Name=+3.3
+Added Pin To Net: NetName=CE Pin=ESP32-35
+Added Pin To Net: NetName=CE Pin=nRF-7
+Added Net: Name=CE
+Added Pin To Net: NetName=CSN Pin=ESP32-34
+Added Pin To Net: NetName=CSN Pin=nRF-3
+Added Net: Name=CSN
+Added Pin To Net: NetName=GND Pin=ESP32-26
+Added Pin To Net: NetName=GND Pin=nRF-8
+Added Net: Name=GND
+Added Pin To Net: NetName=MISO Pin=ESP32-27
+Added Pin To Net: NetName=MISO Pin=nRF-5
+Added Net: Name=MISO
+Added Pin To Net: NetName=MOSI Pin=ESP32-21
+Added Pin To Net: NetName=MOSI Pin=nRF-2
+Added Net: Name=MOSI
+Added Pin To Net: NetName=SCK Pin=ESP32-28
+Added Pin To Net: NetName=SCK Pin=nRF-6
+Added Net: Name=SCK
+Added Class: Name=GateWay
+Added Room: Name=GateWay

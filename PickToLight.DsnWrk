@@ -1,0 +1,8 @@
+[ProjectGroup]
+Version=1.0
+[Project1]
+ProjectPath=Controller\Controller.PrjPcb
+[Project2]
+ProjectPath=ModuleLamp\ModuleLamp.PrjPcb
+[Project3]
+ProjectPath=GateWay\GateWay.PrjPcb
