@@ -12,10 +12,10 @@
 #define LED     7
 
 /// Properties of nRF24L01
-#define CE_PIN      8
-#define CSN_PIN     9
+#define CE_PIN      7
+#define CSN_PIN     8
 #define NUM_PIPE    1
-#define CHANEL_PORT     85
+#define CHANEL_PORT     90
 #define TXT_MAX_LEN     100
 
 /// Properties of Data

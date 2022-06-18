@@ -3,29 +3,30 @@
 
 #define MAX_MODULE  5
 
-Task::Task(){
-    init();
-}
+// Task::Task(){
+//     init();
+// }
 
-Task::~Task(){
+// Task::~Task(){
 
-}
+// }
 
-void Task::init(){
+void taskInit(){
     Serial.begin(9600);
+    Serial.println("init");
     updateToGWay = false;
-    //data = Vector<Data>();
-    // //data = Vector<Data>(storageArray);
-    // Serial.print("data = ");
-    // Serial.println(data.at(0).number);
+    //memset(data, 0, sizeof(data));
+    clearData();
+    delay(100);
     master = I2CProtocol();
     master.I2C_MasterInit();
     Serial.println("master init done");
     recei = NRF24(/*(const byte*)CHANNEL_READ_ADDRESS, (const byte*)CHANNEL_SEND_ADDRESS,*/ CHANEL_PORT);
 }
 
-void Task::clearData(){
+void clearData(){
     Serial.println("\nClear data");
+    //memset(data, 0, sizeof(data));
     unsigned int index = 0;
     while ((data.size() > 0) && (index < data.size())){
         if (data.at(index).confirm == true) {
@@ -38,37 +39,56 @@ void Task::clearData(){
     }
 }
 
-int Task::checkID(int inID){
+int checkID(char inID){
     for (int index = 0; index < data.size(); index++)
         if (data.at(index).id == inID) return index;
     return -1;
 }
 
-bool Task::readDataFromGWay(){
-    clearData();
+bool readDataFromGWay(){
+    Serial.println("\n--- Read data from gate way ---");
     /*
     * Data format: 
     *   rcData = [id1], [num1], [id2], [num2],...,[idn], [numn], '\0', '\0'
     */
     char* rcData = recei.readData();
-    if (rcData[0] == '\0') return false;
-    int index = 0;
-    while (rcData[index] != '\0' && rcData[index + 1] != '\0'){
-        int isExist = checkID(rcData[index]);
-        if (isExist == -1)
-            data.push_back(Data(rcData[index], rcData[++index]));
-        else{
-            data.at(isExist).number = rcData[++index];
-            data.at(isExist).confirm = false;
-        }
-        ++index;
+    Serial.print("\nread size = ");
+    Serial.println(strlen(rcData));
+    if (strcmp(rcData, "OK") == 0){
+        clearData();
+        return false;
     }
+    if (strlen(rcData) == 0) return false;
+    if (data.size() > 0) return false;
+    Serial.print("\ndata = ");
+    Serial.println(rcData);
+    int index = 0;
+    while (((rcData[index] != 0) && (rcData[index + 1] != 0)) & (index < strlen(rcData))){
+        int isExist = checkID(rcData[index]);
+        if (isExist == -1){
+            data.push_back(Data(rcData[index], rcData[index + 1]));
+            Serial.print("\nID: ");
+            Serial.println((int)data.at(data.size() - 1).id);
+            Serial.print("\ndata: ");
+            Serial.println((int)data.at(data.size() - 1).number);
+        }
+        else{
+            data.at(isExist).number = rcData[index + 1];
+            data.at(isExist).confirm = false;
+            Serial.print("\ndata: ");
+            Serial.println((int)data.at(isExist).number);
+        }
+        index += 2;
+    }
+    Serial.println("\n--- End Read data from gate way ---");
     // delete []rcData;
-    rcData = nullptr;
+    // rcData = nullptr;
+    delay(20);
     return true;
 }
 
-void Task::sendDataToSlave(){
+void sendDataToSlave(){
+    Serial.println("\n--- Send data to slave ---");
     Serial.print("data size: ");
     Serial.println(data.size());
     for (unsigned int index = 0; index < data.size(); index++){
@@ -81,11 +101,10 @@ void Task::sendDataToSlave(){
             Serial.println(data.at(index).number);
         }
     }
+    Serial.println("\n--- End Read data from gate way ---");
 }
 
-void Task::readSttFromSlave(){
-    //char* confData = new char[I2C_CONF_LEN + 1];
-    //int confLen;
+void readSttFromSlave(){
     for (unsigned int index = 0; index < data.size(); index++){
         //confData = master.I2C_ReadDataFromSlave(data.at(index).id, &confLen);
         //Serial.print("read data - id = ");
@@ -102,17 +121,20 @@ void Task::readSttFromSlave(){
         //Serial.println(data.at(index).confirm == true? "true": "false");
         //Serial.println(confData);
     }
-    //delete[] confData;
 }
 
-bool Task::sendSttToGway(){
+bool sendSttToGway(){
+    Serial.println("\nSend data to gate way");
     if (data.size() == 0) return false;
     char* _sendData = new char[data.size()+1];
     memset(_sendData, 0, data.size()+1);
     unsigned int index = 0;
     for (int idx = 0; idx < data.size(); idx++){
         if (data.at(idx).confirm == true){
-            _sendData[index] = data.at(idx).id + '0';
+            _sendData[index] = data.at(idx).id;
+            Serial.print("\nid = ");
+            Serial.println(_sendData[index]);
+            _sendData[index + 1] = 0;
             ++index;
         }
     }
@@ -122,21 +144,23 @@ bool Task::sendSttToGway(){
     */
     if (strlen(_sendData) > 0){
         recei.sendData(_sendData);
+        Serial.print("\nSend to gateway success");
         delete [] _sendData;
         return true;
     }
+    Serial.print("\nSend to gateway failed");
     delete [] _sendData;
     return false;
 }
 
-Vector<Data>* Task::getDataRef(){
+Vector<Data>* getDataRef(){
     return &data;
 }
 
-void Task::addValueToData(){
-    while (getDataRef()->size() > 0){
-        getDataRef()->pop_back();
-    }
-    getDataRef()->push_back(Data(I2C_SLAVE_ID, 12));
-    getDataRef()->push_back(Data(I2C_SLAVE_ID1, 1));
+void addValueToData(){
+    // while (getDataRef()->size() > 0){
+    //     getDataRef()->pop_back();
+    // }
+    // getDataRef()->push_back(Data(I2C_SLAVE_ID, 12));
+    // getDataRef()->push_back(Data(I2C_SLAVE_ID1, 1));
 }

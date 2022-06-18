@@ -16,7 +16,7 @@ class NRF24{
 
         void init();
         char* readData();
-        void sendData(char* inData);
+        void sendData(const char* inData);
     protected:
     private:
         // const byte* readAddress;
