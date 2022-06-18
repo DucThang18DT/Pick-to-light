@@ -19,6 +19,7 @@ void _receiveData(int ){
     //int* data = new int[I2C_BYTE_STS];
     //int index = 0;
     I2CProtocol::setConfirm(false);
+    I2CProtocol::setDataSendToMaster(CONF_DATA_FALSE);
     while (Wire.available() /*&& (index < I2C_BYTE_STS)*/){
         I2CProtocol::setDataReceived(Wire.read());
         // data[index] = Wire.read();

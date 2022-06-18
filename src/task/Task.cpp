@@ -54,8 +54,8 @@ void Task::showNumber(int inNum){
         return;
     }
     //if (inNum == -1){
-        m_led7seg.showNumber(inNum);
-        digitalWrite(m_singleLed, HIGH);
+    m_led7seg.showNumber(inNum);
+    digitalWrite(m_singleLed, HIGH);
     // }
     // else{
     //     m_value = inNum;
