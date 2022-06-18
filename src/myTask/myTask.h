@@ -8,9 +8,9 @@
     static NRF24 rf24 = NRF24(CHANNEL_READ_ADDRESS, CHANNEL_SEND_ADDRESS, CHANEL_PORT);
 
     void gWayInit();
-    void sendDataSendToCtler();
+    void sendDataSendToCtler(char* list);
     void sendDataToCloud(char* list);
-    void readDataFromCloud();
+    void readDataFromCloud(char* list);
     void readDataFromCtler(char* list);
     
 #endif

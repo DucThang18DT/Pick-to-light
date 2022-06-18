@@ -39,20 +39,22 @@ void sendDataToCloud(char* list){
       }
     }
   }
-  memset(listConfirm, 0, MAX_LEN);
+  memset(list, 0, MAX_LEN);
   Serial.println("\n--- End send to cloud ---");
 }
 
-void readDataFromCloud(){
-  buildListDevices(listDevices);
+void readDataFromCloud(char* list){
+  buildListDevices(list);
   Serial.print("\nList device: ");
-  Serial.println(listDevices);
+  Serial.println(list);
 }
 
-void sendDataSendToCtler(){
+void sendDataSendToCtler(char *list){
   Serial.println("\n--- Send data to ctler");
-  // rf24.sendData("Test list");
-  rf24.sendData(listDevices);
+  //rf24.sendData("Test list");
+  rf24.sendData(list);
+  Serial.print("\n--List send: ");
+  Serial.println((int)list[0]);
   Serial.println("--- End Send data to ctler");
 }
 
@@ -64,8 +66,15 @@ void readDataFromCtler(char* list){
     Serial.println(data);
     Serial.print("\nLength data = ");
     Serial.println(strlen(data));
+    memset(list, 0, MAX_LEN-1);
     strcpy(list, data);
     Serial.println(strlen(list));
+    // Confirm read
+    rf24.getRadioRef()->stopListening();
+    for (int index = 0; index <10; index++){
+      rf24.sendData("OK");
+    }
+    rf24.getRadioRef()->startListening();
   }
   Serial.println("\n--- End Read data from ctler");
 }

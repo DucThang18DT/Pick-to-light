@@ -17,7 +17,7 @@
 // #define NUM_PIPE    1
 // #define CHANNEL_READ_ADDRESS "00001"
 // #define CHANNEL_SEND_ADDRESS "00002"
-#define CHANEL_PORT     85
+#define CHANEL_PORT     90
 #define TXT_MAX_LEN     100
 
 /// Properties of Data

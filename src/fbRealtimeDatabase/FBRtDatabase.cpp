@@ -68,18 +68,20 @@ void FBRtDatabase::sendData(String path = "/", int num = 0, Mode mode = Mode::se
     switch (mode)
     {
     case Mode::set:
-        if (Firebase.setInt(_firebaseData, path, num)){
-            Serial.println("\nset Data success!");
-        }
-        else{
+        while (!Firebase.setInt(_firebaseData, path, num)){
             Serial.println("\nset Data failed!");
         }
+        Serial.println("\nset Data success!");
         break;
     case Mode::push:
-        Firebase.pushInt(_firebaseData, path, num);
+        while (!Firebase.pushInt(_firebaseData, path, num)){
+            Serial.println("\nset Data failed!");
+        }
         Serial.println("\npush Data success!");
     case Mode::update:
-        Firebase.setInt(_firebaseData, path, num);
+        while (!Firebase.setInt(_firebaseData, path, num)){
+            Serial.println("\nset Data failed!");
+        }
         Serial.println("\nupdate Data success!");
         break;
     }

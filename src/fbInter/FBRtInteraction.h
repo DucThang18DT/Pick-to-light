@@ -16,8 +16,17 @@ static String KEY = "users";
 static FBRtDatabase fbDatatbase = FBRtDatabase(HOST, AUTH, PATH, KEY);
 static FirebaseData(fbStreamData);
 // static String listDevices = {};
-static char* listDevices = new char[MAX_LEN];
-static char* listConfirm = new char[MAX_LEN];
+
+class ListDevice{
+    public:
+        ListDevice();
+        ~ListDevice();
+        char* getListDevicesRef();
+        char* getListConfirmRef();
+    private:
+        char listDevices[MAX_LEN];
+        char listConfirm[MAX_LEN];
+};
 
 // void buildListObjects(std::vector<DeviceItem>* , String, String);
 void buildListDevices(char* inList);

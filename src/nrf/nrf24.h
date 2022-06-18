@@ -17,6 +17,7 @@ class NRF24{
         void init();
         char* readData();
         void sendData(const char* inData);
+        RF24* getRadioRef();
     protected:
     private:
         // char* readAddress;

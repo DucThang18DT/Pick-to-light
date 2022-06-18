@@ -54,7 +54,7 @@ void NRF24::init(){
 }
 
 char* NRF24::readData(){
-  char* text = new char[TXT_MAX_LEN];
+  static char* text = new char[TXT_MAX_LEN];
   memset(text, 0, TXT_MAX_LEN);
   if(radio.available())
   {
@@ -67,4 +67,8 @@ void NRF24::sendData(const char* inData){
   radio.stopListening();
   radio.write(inData, strlen(inData));
   radio.startListening();
+}
+
+RF24* NRF24::getRadioRef(){
+  return &radio;
 }

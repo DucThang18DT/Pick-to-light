@@ -2,7 +2,7 @@
 
 void buildListDevices(char* list){
   Serial.println("\n--build list device---");
-  memset(list, 0, MAX_LEN);
+  memset(list, 0, MAX_LEN-1);
   int length = fbDatatbase.getInt(TOTAL);
   Serial.print("\nTotal: ");
   Serial.println(length);
@@ -11,15 +11,17 @@ void buildListDevices(char* list){
     Serial.print("\nConfirm: ");
     Serial.println(confirm);
     if (confirm == 0){
-      int tempValue = fbDatatbase.getInt(PATH + "/" + String(i/2) + "/" + ID_KEY);
-      list[i] = tempValue & 0xFF;
-      tempValue = fbDatatbase.getInt(PATH + "/" + String(i/2) + "/" + QUANTITY_KEY);
-      list[i+1] = tempValue & 0xFF;
-      list[i+2] = 0;
-      Serial.print("ID = ");
-      Serial.println((int)list[i]);
-      Serial.print("Num = ");
-      Serial.println((int)list[i+1]);
+      int tempID = fbDatatbase.getInt(PATH + "/" + String(i/2) + "/" + ID_KEY);
+      int tempValue = fbDatatbase.getInt(PATH + "/" + String(i/2) + "/" + QUANTITY_KEY);
+      if (tempID && tempValue){
+        list[i] = tempID & 0xFF;
+        list[i+1] = tempValue & 0xFF;
+        list[i+2] = 0;
+        Serial.print("ID = ");
+        Serial.println((int)list[i]);
+        Serial.print("Num = ");
+        Serial.println((int)list[i+1]);
+      }
     }
   }
   Serial.println("\n--End build list device---");
@@ -32,7 +34,7 @@ void streamCallback(StreamData data){
                 data.dataType().c_str(),
                 data.eventType().c_str());
     Serial.println();
-    buildListDevices(listDevices);
+    // buildListDevices(listDevices);
 }
 
 void streamTimeOutCallback(bool timeOut){
@@ -41,3 +43,18 @@ void streamTimeOutCallback(bool timeOut){
     Serial.println("stream timeout, resuming...\n");
 }
 
+char* ListDevice::getListDevicesRef(){
+  return listDevices;
+}
+char* ListDevice::getListConfirmRef(){
+  return listConfirm;
+}
+
+ListDevice::ListDevice(){
+  memset(listDevices, 0, sizeof(listDevices));
+  memset(listConfirm, 0, sizeof(listConfirm));
+}
+
+ListDevice::~ListDevice(){
+  
+}
